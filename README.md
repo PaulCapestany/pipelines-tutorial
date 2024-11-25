@@ -104,7 +104,7 @@ Run the following command to see the `pipeline` service account:
 $ oc get serviceaccount pipeline
 ```
 
-You will use the simple application during this tutorial, which has a [frontend](https://github.com/openshift/pipelines-vote-ui) and [backend](https://github.com/openshift/pipelines-vote-api)
+You will use the simple application during this tutorial, which has a [frontend](https://github.com/paulcapestany/pipelines-vote-ui) and [backend](https://github.com/paulcapestany/pipelines-vote-api)
 
 You can also deploy the same applications by applying the artifacts available in k8s directory of the respective repo
 
@@ -147,7 +147,7 @@ spec:
 
 When a task starts running, it starts a pod and runs each step sequentially in a separate container on the same pod. This task happens to have a single step, but tasks can have multiple steps, and, since they run within the same pod, they have access to the same volumes in order to cache files, access configmaps, secrets, etc. You can specify volume using workspace. It is recommended that Tasks uses at most one writeable Workspace. Workspace can be secret, pvc, config or emptyDir.
 
-Note that only the requirement for a git repository is declared on the task and not a specific git repository to be used. That allows tasks to be reusable for multiple pipelines and purposes. You can find more examples of reusable tasks in the [Tekton Catalog](https://github.com/tektoncd/catalog) and [OpenShift Catalog](https://github.com/openshift/pipelines-catalog) repositories.
+Note that only the requirement for a git repository is declared on the task and not a specific git repository to be used. That allows tasks to be reusable for multiple pipelines and purposes. You can find more examples of reusable tasks in the [Tekton Catalog](https://github.com/tektoncd/catalog) and [OpenShift Catalog](https://github.com/paulcapestany/pipelines-catalog) repositories.
 
 Install the `apply-manifests` and `update-deployment` tasks from the repository using `oc` or `kubectl`, which you will need for creating a pipeline in the next section:
 
@@ -335,7 +335,7 @@ $ tkn pipeline start build-and-deploy \
     --prefix-name build-deploy-api-pipelinerun \
     -w name=shared-workspace,volumeClaimTemplateFile=https://raw.githubusercontent.com/openshift/pipelines-tutorial/master/01_pipeline/03_persistent_volume_claim.yaml \
     -p deployment-name=pipelines-vote-api \
-    -p git-url=https://github.com/openshift/pipelines-vote-api.git \
+    -p git-url=https://github.com/paulcapestany/pipelines-vote-api.git \
     -p IMAGE=image-registry.openshift-image-registry.svc:5000/pipelines-tutorial/pipelines-vote-api \
     --use-param-defaults
 
@@ -353,7 +353,7 @@ $ tkn pipeline start build-and-deploy \
     --prefix-name build-deploy-ui-pipelinerun \
     -w name=shared-workspace,volumeClaimTemplateFile=https://raw.githubusercontent.com/openshift/pipelines-tutorial/master/01_pipeline/03_persistent_volume_claim.yaml \
     -p deployment-name=pipelines-vote-ui \
-    -p git-url=https://github.com/openshift/pipelines-vote-ui.git \
+    -p git-url=https://github.com/paulcapestany/pipelines-vote-ui.git \
     -p IMAGE=image-registry.openshift-image-registry.svc:5000/pipelines-tutorial/pipelines-vote-ui \
     --use-param-defaults
 
@@ -597,7 +597,7 @@ $ oc expose svc el-vote-app
 
 ## Configuring GitHub WebHooks
 
-Now we need to configure webhook-url on [backend](https://github.com/openshift/pipelines-vote-api) and [frontend](https://github.com/openshift/pipelines-vote-ui) source code repositories with the Route we exposed previously.
+Now we need to configure webhook-url on [backend](https://github.com/paulcapestany/pipelines-vote-api) and [frontend](https://github.com/paulcapestany/pipelines-vote-ui) source code repositories with the Route we exposed previously.
 
 * Run the below command to get webhook-url
 
@@ -607,7 +607,7 @@ $ echo "URL: $(oc  get route el-vote-app --template='http://{{.spec.host}}')"
 
 >***Note:***
 >
->Fork the [backend](https://github.com/openshift/pipelines-vote-api) and [frontend](https://github.com/openshift/pipelines-vote-ui) source code repositories so that you have sufficient privileges to configure GitHub webhooks.
+>Fork the [backend](https://github.com/paulcapestany/pipelines-vote-api) and [frontend](https://github.com/paulcapestany/pipelines-vote-ui) source code repositories so that you have sufficient privileges to configure GitHub webhooks.
 
 ### Configure webhook manually
 
@@ -620,7 +620,7 @@ to payload URL > Select Content type as `application/json` > Add secret eg: `123
 
 ![Add webhook](docs/images/add-webhook.png)
 
-- Follow the above procedure to configure the webhook on [frontend](https://github.com/openshift/pipelines-vote-ui) repo
+- Follow the above procedure to configure the webhook on [frontend](https://github.com/paulcapestany/pipelines-vote-ui) repo
 
 Now we should see a webhook configured on your forked source code repositories (on our
 GitHub Repo, go to Settings>Webhooks).
@@ -631,7 +631,7 @@ GitHub Repo, go to Settings>Webhooks).
 
 #### Trigger pipeline Run
 
-When we perform any push event on the [backend](https://github.com/openshift/pipelines-vote-api) the following should happen.
+When we perform any push event on the [backend](https://github.com/paulcapestany/pipelines-vote-api) the following should happen.
 
 1.  The configured webhook in vote-api GitHub repository should push the event payload to our route (exposed EventListener Service).
 
